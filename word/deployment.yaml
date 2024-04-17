@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: word-deploy
+  namespace: word
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: word-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: word-deploy
+        version: v1
+    spec:
+      containers:
+      - image: wordpress:latest
+        name: word-deploy
+        ports:
+        - containerPort: 80

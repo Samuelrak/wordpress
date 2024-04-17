@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: word-service
+  namespace: word
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: word-deploy
+    version: v1
