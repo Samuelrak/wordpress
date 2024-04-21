@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-scripts
+  namespace: word
+data:
+  traveltours.sql: |-
+    {{ .Files.Get "script/traveltours.sql" | indent 4 }}

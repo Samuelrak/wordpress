@@ -1,0 +1,5 @@
+resources:
+  - mysql-service.yaml
+  - mysql-deployment.yaml
+  - mysql-config.yaml
+  - mysql-script.yaml

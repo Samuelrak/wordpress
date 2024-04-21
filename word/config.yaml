@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: word-config
+data:
+  WORDPRESS_DB_HOST: mysql-service
+  WORDPRESS_DB_USER: wpuser
+  WORDPRESS_DB_PASSWORD: jahoda
+  WORDPRESS_DB_NAME: wp
+  REDIS_HOST: redis-service
+  REDIS_PORT: "6379"
