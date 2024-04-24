@@ -3,3 +3,4 @@ resources:
 - deployment.yaml
 - ingress.yaml
 - config.yaml
+- secret.yaml

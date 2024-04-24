@@ -20,6 +20,14 @@ spec:
         name: word-deploy
         ports:
         - containerPort: 80
-        envFrom:
-        - configMapRef:
-            name: word-config
+        volumeMounts:
+        - mountPath: /var/www/html/wp-config.php
+          name: wp-config-volume
+          subPath: wp-config.php
+      volumes:
+      - configMap:
+          name: word-config
+        name: wp-config-volume
+      - name: word-secret-volume
+        secret:
+          secretName: word-secret

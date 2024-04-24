@@ -4,8 +4,7 @@ metadata:
   name: mysql-config
   namespace: word
 data:
-  MYSQL_ROOT_PASSWORD: jahoda
-  MYSQL_DATABASE: wp
-  MYSQL_USER: wpuser
-  MYSQL_PASSWORD: jahoda
-
+ MYSQL_USER: wpuser
+# MYSQL_DATABASE: wp
+# MYSQL_PASSWORD: jahoda
+# MYSQL_ROOT_PASSWORD: jahoda
