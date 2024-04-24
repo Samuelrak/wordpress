@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: insert-myplugin-data
+  namespace: word
+spec:
+  template:
+    metadata:
+      name: insert-myplugin-data
+    spec:
+      containers:
+      - name: insert-data-container
+        image: busybox
+        command: ["/bin/sh"]
+        args: ["-c", "echo 'This is some data' > /var/www/html/myplugin/data.txt"]
+        volumeMounts:
+        - name: plugins-volume
+          mountPath: /var/www/html/myplugin
+      restartPolicy: Never
+      volumes:
+      - name: plugins-volume
+        persistentVolumeClaim:
+          claimName: wordpress-pvc

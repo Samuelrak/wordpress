@@ -16,6 +16,13 @@ spec:
       containers:
         - name: mysql
           image: mysql
+          resources:
+           requests:
+             memory: "370Mi"
+             cpu: "100m"
+           limits:
+             memory: "400Mi"
+             cpu: "200m"
           envFrom:
             - configMapRef:
                 name: mysql-config
