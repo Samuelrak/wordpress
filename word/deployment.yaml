@@ -15,27 +15,28 @@ spec:
         app: word-deploy
         version: v1
     spec:
-#      affinity:
-#        nodeAffinity:
-#          requiredDuringSchedulingIgnoredDuringExecution:
-#            nodeSelectorTerms:
-#            - matchExpressions:
-#              - key: kubernetes.io/hostname
-#                operator: In
-#                values:
-#                - worker01
       affinity:
-        podAntiAffinity:
+        nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
                 operator: In
                 values:
-                - word-deploy
-            topologyKey: kubernetes.io/hostname
-      nodeSelector:
-        kubernetes.io/hostname: worker01
+                - worker01
+#                - samuel
+#      affinity:
+#        podAntiAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#              - key: app
+#                operator: In
+#                values:
+#                - word-deploy
+#            topologyKey: kubernetes.io/hostname
+#      nodeSelector:
+#        kubernetes.io/hostname: worker01
       containers:
       - image: wordpress:latest
         name: word-deploy

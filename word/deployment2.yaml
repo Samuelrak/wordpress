@@ -27,17 +27,28 @@ spec:
 #            topologyKey: kubernetes.io/hostname
     spec:
       affinity:
-        podAntiAffinity:
+        nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
                 operator: In
                 values:
-                - word-deploy
-            topologyKey: kubernetes.io/hostname
-      nodeSelector:
-        kubernetes.io/hostname: worker01
+#                - samuel
+                - worker01
+#    spec:
+#      affinity:
+#        podAntiAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#              - key: app
+#                operator: In
+#                values:
+#                - word-deploy
+#            topologyKey: kubernetes.io/hostname
+#      nodeSelector:
+#        kubernetes.io/hostname: samuel
       containers:
       - image: wordpress:latest
         name: word-deploy
