@@ -1,6 +1,7 @@
 resources:
 - service.yaml
 - deployment.yaml
+- deployment2.yaml
 - ingress.yaml
 - config.yaml
 - secret.yaml

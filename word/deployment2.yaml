@@ -1,29 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: word-deploy
+  name: word2-deploy
   namespace: word
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: word-deploy
-      version: v1
+      app: word2-deploy
+      version: v2
   template:
     metadata:
       labels:
-        app: word-deploy
-        version: v1
-    spec:
+        app: word2-deploy
+        version: v2
+#    spec:
 #      affinity:
-#        nodeAffinity:
+#        podAntiAffinity:
 #          requiredDuringSchedulingIgnoredDuringExecution:
-#            nodeSelectorTerms:
-#            - matchExpressions:
-#              - key: kubernetes.io/hostname
+#          - labelSelector:
+#              matchExpressions:
+#              - key: app
 #                operator: In
 #                values:
-#                - worker01
+#                - word-deploy
+#            topologyKey: kubernetes.io/hostname
+    spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
