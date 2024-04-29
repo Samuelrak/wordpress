@@ -6,5 +6,6 @@ resources:
  - word
  - mysql
  - redis
- - disruption.yaml
- - horizon.yaml
+# - mindisruption.yaml
+# - maxdisruption.yaml
+# - horizon.yaml

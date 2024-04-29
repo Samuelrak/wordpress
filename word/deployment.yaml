@@ -4,7 +4,7 @@ metadata:
   name: word-deploy
   namespace: word
 spec:
-  replicas: 2
+  replicas: 10
   selector:
     matchLabels:
       app: word-deploy
@@ -15,11 +15,32 @@ spec:
         app: word-deploy
         version: v1
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+#            - labelSelector:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - word-deploy
+              topologyKey: kubernetes.io/hostname
       containers:
       - image: wordpress:latest
         name: word-deploy
         ports:
         - containerPort: 80
+        resources:
+          limits:
+            cpu: 200m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
         volumeMounts:
         - mountPath: /var/www/html/wp-config.php
           name: wp-config-volume
@@ -27,19 +48,12 @@ spec:
         - mountPath: /var/www/html/wp-content/plugins/classic-editor
           name: plugins-volume
           readOnly: true
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "200m"
       volumes:
-      - name: wp-config-volume
-        configMap:
+      - configMap:
           name: word-config
-      - name: plugins-volume
-        emptyDir: {}
+        name: wp-config-volume
+      - emptyDir: {}
+        name: plugins-volume
       - name: word-secret-volume
         secret:
           secretName: word-secret

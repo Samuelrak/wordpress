@@ -1,0 +1,11 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: word-max-deploy-pdb
+  namespace: word
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: word-deploy
+      version: v1
