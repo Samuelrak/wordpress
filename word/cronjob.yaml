@@ -1,0 +1,26 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: wordpress-backup
+  namespace: word
+spec:
+  schedule: "0 0 * * *"  # Run at midnight every day
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: wordpress-backup
+        spec:
+          containers:
+          - name: backup
+            image: alpine:latest
+            command: ["sh", "-c", "echo 'Backup script goes here'"]  # Define your backup script here
+            volumeMounts:
+            - name: wordpress-data
+              mountPath: /wordpress-data
+          restartPolicy: OnFailure
+          volumes:
+          - name: wordpress-data
+            persistentVolumeClaim:
+              claimName: word-word-deploy

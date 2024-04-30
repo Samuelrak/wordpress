@@ -34,8 +34,8 @@ spec:
               - key: kubernetes.io/hostname
                 operator: In
                 values:
-#                - samuel
-                - worker01
+                - samuel
+#                - worker01
 #    spec:
 #      affinity:
 #        podAntiAffinity:

@@ -16,7 +16,7 @@ spec:
         version: v1
     spec:
       affinity:
-        nodeAffinity:
+       nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:

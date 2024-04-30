@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-operator
+  namespace: minio-operator
+  labels:
+    app.kubernetes.io/instance: enterprise-operator
+    app.kubernetes.io/name: enterprise-operator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: minio-enterprise-operator
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: minio-enterprise-operator
+        app.kubernetes.io/instance: enterprise-operator
+        app.kubernetes.io/name: enterprise-operator
+    spec:
+      serviceAccountName: minio-operator
+      containers:
+        - name: enterprise-operator
+          image: quay.io/mineos/operator:RELEASE.2024-04-12T17-44-35Z
+          imagePullPolicy: IfNotPresent
+          args:
+            - enterprise
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+              ephemeral-storage: 500Mi
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: name
+                    operator: In
+                    values:
+                      - enterprise-operator
+              topologyKey: kubernetes.io/hostname
