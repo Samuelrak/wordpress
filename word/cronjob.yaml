@@ -1,26 +1,29 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: wordpress-backup
+  name: backup-data
   namespace: word
 spec:
-  schedule: "0 0 * * *"  # Run at midnight every day
+  schedule: "13 0 * * *"  # Run at midnight every day
   jobTemplate:
     spec:
       template:
-        metadata:
-          labels:
-            app: wordpress-backup
         spec:
           containers:
-          - name: backup
-            image: alpine:latest
-            command: ["sh", "-c", "echo 'Backup script goes here'"]  # Define your backup script here
-            volumeMounts:
-            - name: wordpress-data
-              mountPath: /wordpress-data
+          - name: backup-container
+            image: alpine:tag  # Use the image with your backup script
+            command: ["/bin/sh", "-c"]
+            args:
+              - /home/samuel/word/word/script/back-up.sh
+            env:
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: access-key
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: secret-key
           restartPolicy: OnFailure
-          volumes:
-          - name: wordpress-data
-            persistentVolumeClaim:
-              claimName: word-word-deploy
