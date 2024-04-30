@@ -1,17 +1,17 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: backup-data
+  name: backup-word-data
   namespace: word
 spec:
-  schedule: "13 0 * * *"  # Run at midnight every day
+  schedule: "35 11 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: backup-container
-            image: alpine:tag  # Use the image with your backup script
+            image: alpine:tag
             command: ["/bin/sh", "-c"]
             args:
               - /home/samuel/word/word/script/back-up.sh

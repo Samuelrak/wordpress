@@ -9,4 +9,4 @@ resources:
 # - mindisruption.yaml
 # - maxdisruption.yaml
  - horizon.yaml
- - mimio
+# - mimio
