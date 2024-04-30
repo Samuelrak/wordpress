@@ -4,17 +4,17 @@ metadata:
   name: backup-word-data
   namespace: word
 spec:
-  schedule: "35 11 * * *"
+  schedule: "09 15 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: backup-container
-            image: alpine:tag
+            image: samuelrak/travel:minio3
             command: ["/bin/sh", "-c"]
             args:
-              - /home/samuel/word/word/script/back-up.sh
+            - /usr/local/bin/back-up.sh
             env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
