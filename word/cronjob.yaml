@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: backup-wordpress1
+  name: backup-wordpress
   namespace: word
 spec:
-  schedule: "46 14 * * *"
+  schedule: "48 14 * * *"
   jobTemplate:
     spec:
       template:

@@ -1,0 +1,9 @@
+FROM mysql:latest
+
+RUN apt-get update && apt-get install -y curl \
+    && curl -L https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/local/bin/mc \
+    && chmod +x /usr/local/bin/mc
+
+WORKDIR /
+
+CMD ["bash"]
