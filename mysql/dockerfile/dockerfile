@@ -1,9 +1,9 @@
-FROM mysql:latest
+FROM ubuntu:latest
 
-RUN apt-get update && apt-get install -y curl \
-    && curl -L https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/local/bin/mc \
-    && chmod +x /usr/local/bin/mc
+RUN apt-get update
 
-WORKDIR /
+RUN apt-get install -y mysql-server
 
-CMD ["bash"]
+ RUN apt-get install -y mysql-client
+
+ CMD ["service", "mysql", "start"]

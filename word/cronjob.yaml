@@ -4,7 +4,7 @@ metadata:
   name: backup-wordpress
   namespace: word
 spec:
-  schedule: "48 14 * * *"
+  schedule: "20 17 * * *"
   jobTemplate:
     spec:
       template:

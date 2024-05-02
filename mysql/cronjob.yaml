@@ -4,23 +4,25 @@ metadata:
   name: backup-mysql
   namespace: word
 spec:
-  schedule: "00 16 * * *"
+  schedule: "9 17 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: mysql-backup-container
-            image: debian:latest
+            image: ubuntu:latest
             command: ["/bin/sh", "-c"]
             args:
               - |
-                mkdir -p /backup
+                mkdir /backup
+                apt-get update && apt-get install -y mysql-client
                 mysqldump -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > /backup/mysql_backup_$(date +"%Y-%m-%d").sql
                 echo "mysql backup completed successfully."
                 apt-get update && apt-get install -y mc
                 mc alias set myminio "http://console.minio-operator.svc.cluster.local:9090" "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
                 mc cp /backup/mysql_backup_$(date +"%Y-%m-%d").sql myminio/backup/
+                rm /backup/mysql_backup_$(date +"%Y-%m-%d").sql
             env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
