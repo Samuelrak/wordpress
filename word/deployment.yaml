@@ -57,11 +57,14 @@ spec:
           name: plugins-volume
           readOnly: true
       volumes:
-      - configMap:
+      - name: wp-config-volume
+        configMap:
           name: word-config
-        name: wp-config-volume
-      - emptyDir: {}
-        name: plugins-volume
+      - name: plugins-volume
+        emptyDir: {}
       - name: word-secret-volume
         secret:
           secretName: word-secret
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wordpress-pvc

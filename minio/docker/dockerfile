@@ -1,5 +1,9 @@
 FROM alpine:latest
 
+ENV MINIO_ACCESS_KEY WuUESqfpsixGtKUm
+
+ENV MINIO_SECRET_KEY YEK60CcdbySXj8RHETI84JTIWE1sWe
+
 RUN apk --no-cache add mysql-client curl
 
 RUN curl -fsSL https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/bin/mc && \

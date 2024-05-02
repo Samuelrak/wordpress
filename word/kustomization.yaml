@@ -7,4 +7,4 @@ resources:
 - secret.yaml
 - cronjob.yaml
 - minio-secret.yaml
-
+- pvc.yaml

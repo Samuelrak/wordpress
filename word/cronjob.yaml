@@ -1,20 +1,23 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: backup-word-data
+  name: backup-wordpress
   namespace: word
 spec:
-  schedule: "09 15 * * *"
+  schedule: "38 12 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: backup-container
-            image: samuelrak/travel:minio3
+            image: wordpress:latest
             command: ["/bin/sh", "-c"]
             args:
-            - /usr/local/bin/back-up.sh
+            - |
+              tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html/ .
+              mc alias set myminio "http://console.minio-operator.svc.cluster.local:9090" "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
+              mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz myminio/backup/
             env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
@@ -27,3 +30,9 @@ spec:
                   name: minio-secret
                   key: secret-key
           restartPolicy: OnFailure
+          volumes:
+          - name: wordpress-persistent-storage
+            persistentVolumeClaim:
+              claimName: wordpress-pvc
+          - name: backup-volume
+            emptyDir: {}
