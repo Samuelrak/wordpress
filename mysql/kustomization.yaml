@@ -4,3 +4,5 @@ resources:
   - mysql-config.yaml
 #  - mysql-script.yaml
 #  - mysql-secret.yaml
+  - cronjob.yaml
+  - pvc.yaml

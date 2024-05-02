@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-mysql
+  namespace: word
+spec:
+  schedule: "46 14 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: mysql-backup-container
+            image: mysql:latest
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                mysqldump -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > /backup/mysql_backup_$(date +"%Y-%m-%d").sql
+                apt-get update && apt-get install -y mc
+                mc alias set myminio "http://console.minio-operator.svc.cluster.local:9090" "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
+                mc cp /backup/mysql_backup_$(date +"%Y-%m-%d").sql myminio/backup/
+            env:
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: access-key
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: secret-key
+          restartPolicy: OnFailure
+          volumes:
+          - name: mysql-persistent-storage
+            persistentVolumeClaim:
+              claimName: mysql-pvc
+          - name: backup-volume
+            emptyDir: {}

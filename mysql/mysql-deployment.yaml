@@ -21,10 +21,14 @@ spec:
             name: mysql-secret
         image: mysql
         name: mysql
-        resources:
-          limits:
-            cpu: 200m
-            memory: 400Mi
-          requests:
-            cpu: 100m
-            memory: 370Mi
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+#        resources:
+#          limits:
+#            cpu: 200m
+#            memory: 400Mi
+#          requests:
+#            cpu: 100m
+#            memory: 370Mi
