@@ -1,0 +1,134 @@
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8786 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [13.8 kB]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [155 kB]
+Fetched 9209 kB in 5s (1852 kB/s)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+All packages are up to date.
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libgpm2 libslang2 mailcap mc-data unzip
+Suggested packages:
+  gpm arj catdvi | texlive-binaries dbview djvulibre-bin epub-utils
+  genisoimage gv imagemagick libaspell-dev links | w3m | lynx odt2txt
+  poppler-utils python python-boto python-tz unar wimtools xpdf | pdf-viewer
+  zip
+The following NEW packages will be installed:
+  apt-utils libgpm2 libslang2 mailcap mc mc-data unzip
+0 upgraded, 7 newly installed, 0 to remove and 0 not upgraded.
+Need to get 2944 kB of archives.
+After this operation, 11.9 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian bookworm/main amd64 apt-utils amd64 2.6.1 [309 kB]
+Get:2 http://deb.debian.org/debian bookworm/main amd64 libgpm2 amd64 1.20.7-10+b1 [14.2 kB]
+Get:3 http://deb.debian.org/debian bookworm/main amd64 libslang2 amd64 2.3.3-3 [554 kB]
+Get:4 http://deb.debian.org/debian bookworm/main amd64 mailcap all 3.70+nmu1 [32.0 kB]
+Get:5 http://deb.debian.org/debian bookworm/main amd64 mc-data all 3:4.8.29-2 [1346 kB]
+Get:6 http://deb.debian.org/debian bookworm/main amd64 mc amd64 3:4.8.29-2 [522 kB]
+Get:7 http://deb.debian.org/debian bookworm/main amd64 unzip amd64 6.0-28 [166 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 2944 kB in 1s (1997 kB/s)
+Selecting previously unselected package apt-utils.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 16451 files and directories currently installed.)
+Preparing to unpack .../0-apt-utils_2.6.1_amd64.deb ...
+Unpacking apt-utils (2.6.1) ...
+Selecting previously unselected package libgpm2:amd64.
+Preparing to unpack .../1-libgpm2_1.20.7-10+b1_amd64.deb ...
+Unpacking libgpm2:amd64 (1.20.7-10+b1) ...
+Selecting previously unselected package libslang2:amd64.
+Preparing to unpack .../2-libslang2_2.3.3-3_amd64.deb ...
+Unpacking libslang2:amd64 (2.3.3-3) ...
+Selecting previously unselected package mailcap.
+Preparing to unpack .../3-mailcap_3.70+nmu1_all.deb ...
+Unpacking mailcap (3.70+nmu1) ...
+Selecting previously unselected package mc-data.
+Preparing to unpack .../4-mc-data_3%3a4.8.29-2_all.deb ...
+Unpacking mc-data (3:4.8.29-2) ...
+Selecting previously unselected package mc.
+Preparing to unpack .../5-mc_3%3a4.8.29-2_amd64.deb ...
+Unpacking mc (3:4.8.29-2) ...
+Selecting previously unselected package unzip.
+Preparing to unpack .../6-unzip_6.0-28_amd64.deb ...
+Unpacking unzip (6.0-28) ...
+Setting up apt-utils (2.6.1) ...
+Setting up libgpm2:amd64 (1.20.7-10+b1) ...
+Setting up unzip (6.0-28) ...
+Setting up libslang2:amd64 (2.3.3-3) ...
+Setting up mc-data (3:4.8.29-2) ...
+Setting up mailcap (3.70+nmu1) ...
+Setting up mc (3:4.8.29-2) ...
+update-alternatives: using /usr/bin/mcview to provide /usr/bin/view (view) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/view.1.gz because associated file /usr/share/man/man1/mcview.1.gz (of link group view) doesn't exist
+update-alternatives: using /usr/bin/mcedit to provide /usr/bin/editor (editor) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/editor.1.gz because associated file /usr/share/man/man1/mcedit.1.gz (of link group editor) doesn't exist
+Processing triggers for libc-bin (2.36-9+deb12u6) ...
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+mc is already the newest version (3:4.8.29-2).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Cannot get terminal settings: Inappropriate ioctl for device (25)
+[?1049h[22;0;0t[1;24r[4l[24;1H(B[m[37m[40m(B[m[39;49m[K[?1049l[23;0;0t[?1001s[?1002h[?1006h[?2004h[?1049h[22;0;0t[1;24r[4l[?1h=(B[m[39m[49m[1;24r[H[2J[2;79H[1K (0[37m[44mk[2;80H]0;mc [root@backup-wordpress-28577951-nnn6d]:/var/www/html>]0;mc [root@backup-wordpress-28577951-nnn6d]:/var/www/html>l(B[m(B[37m[44m<(0[37m[44mq(B[m(B[30m[47m /var/www/html (0[37m[44mqqqqqqqqqqqqqqqq(B[m(B[37m[44m.[^]>(0[37m[44mk[39C
+x(B[m(B[1m[33m[44m.n     Name      (B[m(0[37m[44mx(B[m(B[1m[33m[44m Size  (B[m(0[37m[44mx(B[m(B[1m[33m[44mModify time (B[m(0[37m[44mx
+x(B[m(B[30m[46m/..              (0[30m[46mx(B[m(B[30m[46mUP--DIR(0[30m[46mx(B[m(B[30m[46mApr 24 08:40(0[37m[44mx
+x(B[m(B[1m[37m[44m/wp-content      (B[m(0[37m[44mx(B[m(B[1m[37m[44m   4096(B[m(0[37m[44mx(B[m(B[1m[37m[44mMay  2 19:11(B[m(0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+tqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqu
+x(B[m(B[37m[44mUP--DIR                               (0[37m[44mx
+mqqqqqqqqqqqqqqqqqqqq(B[m(B[37m[44m 17G / 55G (30%) (0[37m[44mqj
+(B[m(B[39m[49mHint: Tab changes your current panel.
+
+Failed to open terminal.SLang_getkey returned SLANG_GETKEY_ERROR
+Assuming EOF on stdin and exiting
+Cannot get terminal settings: Inappropriate ioctl for device (25)
+[1m[37m[40m 1(B[m[30m[46mHelp  [1m[37m[40m 2(B[m[30m[46mMenu  [1m[37m[40m 3(B[m[30m[46mView  [1m[37m[40m 4(B[m[30m[46mEdit  [1m[37m[40m 5(B[m[30m[46mCopy  [1m[37m[40m 6(B[m[30m[46mRenMov[1m[37m[40m 7(B[m[30m[46mMkdir [1m[37m[40m 8(B[m[30m[46mDelete[1m[37m[40m 9(B[m[30m[46mPullDn[1m[37m[40m10(B[m[30m[46mQuit[K[22;80H]0;mc [root@backup-wordpress-28577951-nnn6d]:/var/www/html>[1;1H  Left     File     Command     Options     Right[K[2;41H(0[37m[44ml(B[m(B[37m[44m<(0[37m[44mq(B[m(B[37m[44m /var/www/html (0[37m[44mqqqqqqqqqqqqqqqq(B[m(B[37m[44m.[^]>[3;41H(0[37m[44mx(B[m(B[1m[33m[44m.n     Name      (B[m(0[37m[44mx(B[m(B[1m[33m[44m Size  (B[m(0[37m[44mx(B[m(B[1m[33m[44mModify time (B[m(0[37m[44mx[4;41Hx(B[m(B[1m[37m[44m/..              (B[m(0[37m[44mx(B[m(B[1m[37m[44mUP--DIR(B[m(0[37m[44mx(B[m(B[1m[37m[44mApr 24 08:40(B[m(0[37m[44mx[5;41Hx(B[m(B[1m[37m[44m/wp-content      (B[m(0[37m[44mx(B[m(B[1m[37m[44m   4096(B[m(0[37m[44mx(B[m(B[1m[37m[44mMay  2 19:11(B[m(0[37m[44mx[6;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[7;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[8;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[9;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[10;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[11;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[12;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[13;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[14;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[15;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[16;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[17;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[18;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[19;41Htqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqu[20;41Hx(B[m(B[37m[44mUP--DIR                               (0[37m[44mx[21;41Hmqqqqqqqqqqqqqqqqqqqq(B[m(B[37m[44m 17G / 55G (30%) (0[37m[44mqj[23;1H(B[m(B[39m[49m#[23;3H[?1049h[22;0;0t[1;24r[4l[24;1H(B[m[37m[40m(B[m[39;49m[K[?1049l[23;0;0t[?1001s[?1002h[?1006h[?2004h[?1049h[22;0;0t[1;24r[4l[?1h=(B[m[39m[49m[1;24r[H[2J[2;79H[1K (0[37m[44mk[2;80H]0;mc [root@backup-wordpress-28577951-nnn6d]:/var/www/html>]0;mc [root@backup-wordpress-28577951-nnn6d]:/var/www/html>l(B[m(B[37m[44m<(0[37m[44mq(B[m(B[30m[47m /var/www/html (0[37m[44mqqqqqqqqqqqqqqqq(B[m(B[37m[44m.[^]>(0[37m[44mk[39C
+x(B[m(B[1m[33m[44m.n     Name      (B[m(0[37m[44mx(B[m(B[1m[33m[44m Size  (B[m(0[37m[44mx(B[m(B[1m[33m[44mModify time (B[m(0[37m[44mx
+x(B[m(B[30m[46m/..              (0[30m[46mx(B[m(B[30m[46mUP--DIR(0[30m[46mx(B[m(B[30m[46mApr 24 08:40(0[37m[44mx
+x(B[m(B[1m[37m[44m/wp-content      (B[m(0[37m[44mx(B[m(B[1m[37m[44m   4096(B[m(0[37m[44mx(B[m(B[1m[37m[44mMay  2 19:11(B[m(0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+x(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx
+tqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqu
+x(B[m(B[37m[44mUP--DIR                               (0[37m[44mx
+mqqqqqqqqqqqqqqqqqqqq(B[m(B[37m[44m 17G / 55G (30%) (0[37m[44mqj
+(B[m(B[39m[49mHint: Tab changes your current panel.
+
+Failed to open terminal.SLang_getkey returned SLANG_GETKEY_ERROR
+Assuming EOF on stdin and exiting
+[1m[37m[40m 1(B[m[30m[46mHelp  [1m[37m[40m 2(B[m[30m[46mMenu  [1m[37m[40m 3(B[m[30m[46mView  [1m[37m[40m 4(B[m[30m[46mEdit  [1m[37m[40m 5(B[m[30m[46mCopy  [1m[37m[40m 6(B[m[30m[46mRenMov[1m[37m[40m 7(B[m[30m[46mMkdir [1m[37m[40m 8(B[m[30m[46mDelete[1m[37m[40m 9(B[m[30m[46mPullDn[1m[37m[40m10(B[m[30m[46mQuit[K[22;80H]0;mc [root@backup-wordpress-28577951-nnn6d]:/var/www/html>[1;1H  Left     File     Command     Options     Right[K[2;41H(0[37m[44ml(B[m(B[37m[44m<(0[37m[44mq(B[m(B[37m[44m /var/www/html (0[37m[44mqqqqqqqqqqqqqqqq(B[m(B[37m[44m.[^]>[3;41H(0[37m[44mx(B[m(B[1m[33m[44m.n     Name      (B[m(0[37m[44mx(B[m(B[1m[33m[44m Size  (B[m(0[37m[44mx(B[m(B[1m[33m[44mModify time (B[m(0[37m[44mx[4;41Hx(B[m(B[1m[37m[44m/..              (B[m(0[37m[44mx(B[m(B[1m[37m[44mUP--DIR(B[m(0[37m[44mx(B[m(B[1m[37m[44mApr 24 08:40(B[m(0[37m[44mx[5;41Hx(B[m(B[1m[37m[44m/wp-content      (B[m(0[37m[44mx(B[m(B[1m[37m[44m   4096(B[m(0[37m[44mx(B[m(B[1m[37m[44mMay  2 19:11(B[m(0[37m[44mx[6;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[7;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[8;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[9;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[10;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[11;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[12;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[13;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[14;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[15;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[16;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[17;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[18;41Hx(B[m(B[37m[44m                 (0[37m[44mx(B[m(B[37m[44m       (0[37m[44mx(B[m(B[37m[44m            (0[37m[44mx[19;41Htqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqu[20;41Hx(B[m(B[37m[44mUP--DIR                               (0[37m[44mx[21;41Hmqqqqqqqqqqqqqqqqqqqq(B[m(B[37m[44m 17G / 55G (30%) (0[37m[44mqj[23;1H(B[m(B[39m[49m#[23;3H

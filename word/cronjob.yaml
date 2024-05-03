@@ -4,7 +4,7 @@ metadata:
   name: backup-wordpress
   namespace: word
 spec:
-  schedule: "20 17 * * *"
+  schedule: "40 21 * * *"
   jobTemplate:
     spec:
       template:
@@ -15,10 +15,10 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
+                export TERM=xterm
+                apt-get update && apt-get install -y tar mc
                 mkdir -p /backup
                 tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html/ .
-                apt-get update && apt-get install -y mc
-                mc alias set myminio "http://console.minio-operator.svc.cluster.local:9090" "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
                 mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz myminio/backup/
                 rm /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
             env:
