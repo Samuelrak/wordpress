@@ -15,12 +15,15 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
-                export TERM=vt100  # Set the TERM environment variable to avoid terminal-related issues
-                apt-get update && apt-get install -y tar mc  # Install necessary packages (tar and mc)
-                mkdir -p /backup  # Create a directory to store the backup
-                tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html/ .  # Create a tar archive of WordPress files
+                export TERM=vt100
+                apt-get update && apt-get install -y tar mc
+                mkdir -p /backup
+                tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html/ .
+                mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
                 cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
-                mc alias set minio http://127.0.0.1:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY --api S3v4 # Copy backup to Minio
+                mc alias set minio http://127.0.0.1:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY --api S3v4
+                mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
+                cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
             env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
