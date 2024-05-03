@@ -4,22 +4,21 @@ metadata:
   name: backup-wordpress
   namespace: word
 spec:
-  schedule: "52 12 * * *"
+  schedule: "46 11 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: backup-container
-            image: wordpress:latest
+            image: alpine:latest
             command: ["/bin/sh", "-c"]
             args:
               - |
-                apt-get update && apt-get install -y tar mc
                 mkdir -p /backup
                 tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html/ .
-                mc alias set minio http://minio-service:9000 "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
-                mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
+                alias set minio http://minio-service:9000 "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
+                cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
             env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
