@@ -4,7 +4,7 @@ metadata:
   name: backup-wordpress
   namespace: word
 spec:
-  schedule: "51 18 * * *"
+  schedule: "8 10 * * *"
   jobTemplate:
     spec:
       template:
@@ -16,25 +16,27 @@ spec:
             args:
               - |
                 export TERM=vt100
+                export MC_SKIN=default
                 apt-get update && apt-get install -y tar mc
                 mkdir -p /backup
                 tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html/ .
-                mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
-                cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
-                mc alias set minio http://127.0.0.1:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY --api S3v4
-                mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
-                cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/wordpress_backup_$(date +"%Y-%m-%d").tar.gz
+                mc -n -u http://minio-service:9000 cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/
             env:
             - name: MINIO_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: minio-secret
-                  key: access-key
+              value: "888MkHCQxXmccSdOug7O" # Updated with the access key value
             - name: MINIO_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: minio-secret
-                  key: secret-key
+              value: "4bN9WsaezuoaI9mEN25zY67rRcpnrPKAiF7CC9uh"
+#            env:
+#            - name: MINIO_ACCESS_KEY
+#              valueFrom:
+#                secretKeyRef:
+#                  name: minio-secret
+#                  key: access-key
+#            - name: MINIO_SECRET_KEY
+#              valueFrom:
+#                secretKeyRef:
+#                  name: minio-secret
+#                  key: secret-key
             volumeMounts:
             - name: wordpress-persistent-storage
               mountPath: /var/www/html
