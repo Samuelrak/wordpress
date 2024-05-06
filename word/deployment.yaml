@@ -53,9 +53,12 @@ spec:
         - mountPath: /var/www/html/wp-config.php
           name: wp-config-volume
           subPath: wp-config.php
-        - mountPath: /var/www/html/wp-content/plugins/classic-editor
-          name: plugins-volume
-          readOnly: true
+#       - mountPath: /var/www/html/wp-content/plugins/classic-editor
+#         name: plugins-volume
+#         readOnly: true
+        - mountPath: /var/www/html
+          name: wordpress-files
+          readOnly: false
       volumes:
       - name: wp-config-volume
         configMap:
@@ -65,6 +68,6 @@ spec:
       - name: word-secret-volume
         secret:
           secretName: word-secret
-      - name: wordpress-persistent-storage
+      - name: wordpress-files
         persistentVolumeClaim:
           claimName: wordpress-pvc

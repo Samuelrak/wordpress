@@ -4,27 +4,27 @@ metadata:
   name: backup-wordpress
   namespace: word
 spec:
-  schedule: "40 13 * * *"
+  schedule: "53 9 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: backup-container
-            image: alpine:latest
+            image: wordpress:latest
             tty: false
             command: ["/bin/sh", "-c"]
             args:
               - |
                 export TERM=vt100
                 export DEBIAN_FRONTEND=noninteractive
-                apk add --no-cache curl
-                curl -L https://dl.min.io/client/mc/release/linux-amd64/mc \
+                curl https://dl.min.io/client/mc/release/linux-amd64/mc \
                 --create-dirs \
                 -o $HOME/minio-binaries/mc
                 chmod +x $HOME/minio-binaries/mc
                 export PATH=$PATH:$HOME/minio-binaries/
                 mkdir -p /backup
+                cat /var/www/html/wp-config.php | grep ABSPATH
                 mc alias set myminio http://minio-service:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
                 tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html .
                 mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz myminio/wordpress/
@@ -33,9 +33,6 @@ spec:
               value: "KD4zQQpBL0rXdesz2eSB"
             - name: MINIO_SECRET_KEY
               value: "F1P1j1taPSGs6Poy6zSRPNvbXwGnfh2roxqCz1IS"
-            volumeMounts:
-            - name: wordpress-persistent-storage
-              mountPath: /var/www/html
           restartPolicy: OnFailure
           volumes:
           - name: wordpress-persistent-storage
@@ -43,3 +40,7 @@ spec:
               claimName: wordpress-pvc
           - name: backup-volume
             emptyDir: {}
+          - name: wordpress-files
+            hostPath:
+              path: /var/www/html
+
