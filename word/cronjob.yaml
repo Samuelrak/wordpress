@@ -4,7 +4,7 @@ metadata:
   name: backup-wordpress
   namespace: word
 spec:
-  schedule: "8 10 * * *"
+  schedule: "55 8 * * *"
   jobTemplate:
     spec:
       template:
@@ -12,20 +12,26 @@ spec:
           containers:
           - name: backup-container
             image: wordpress:latest
+            tty: false
             command: ["/bin/sh", "-c"]
             args:
               - |
                 export TERM=vt100
-                export MC_SKIN=default
-                apt-get update && apt-get install -y tar mc
+                export DEBIAN_FRONTEND=noninteractive
+                curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+                --create-dirs \
+                -o $HOME/minio-binaries/mc
+                chmod +x $HOME/minio-binaries/mc
+                export PATH=$PATH:$HOME/minio-binaries/
                 mkdir -p /backup
                 tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html/ .
-                mc -n -u http://minio-service:9000 cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz minio/wordpress/
+                mc alias set myminio http://minio-service:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+                mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz myminio/wordpress/
             env:
             - name: MINIO_ACCESS_KEY
-              value: "888MkHCQxXmccSdOug7O" # Updated with the access key value
+              value: "KD4zQQpBL0rXdesz2eSB"
             - name: MINIO_SECRET_KEY
-              value: "4bN9WsaezuoaI9mEN25zY67rRcpnrPKAiF7CC9uh"
+              value: "F1P1j1taPSGs6Poy6zSRPNvbXwGnfh2roxqCz1IS"
 #            env:
 #            - name: MINIO_ACCESS_KEY
 #              valueFrom:
@@ -42,6 +48,8 @@ spec:
               mountPath: /var/www/html
             - name: backup-volume
               mountPath: /backup
+            - name: minio-volume
+              mountPath: /data/wordpress
           restartPolicy: OnFailure
           volumes:
           - name: wordpress-persistent-storage
@@ -49,5 +57,9 @@ spec:
               claimName: wordpress-pvc
           - name: backup-volume
             emptyDir: {}
+          - name: minio-volume
+            hostPath:
+              path: /data/wordpress/
+              type: DirectoryOrCreate
           dnsPolicy: ClusterFirst
           schedulerName: default-scheduler
