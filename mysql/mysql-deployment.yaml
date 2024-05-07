@@ -14,7 +14,8 @@ spec:
         app: mysql
     spec:
       containers:
-      - env:
+      - name: mysql
+        env:
         - name: MYSQL_USER
           valueFrom:
             configMapKeyRef:
@@ -36,12 +37,25 @@ spec:
               name: mysql-config
               key: MYSQL_ROOT_PASSWORD
         image: mysql:latest
-        name: mysql
         volumeMounts:
         - name: mysql-data
           mountPath: /var/lib/mysql
         - name: mysql-init-script
           mountPath: /docker-entrypoint-initdb.d
+      - name: mysql-restore
+        image: mysql:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          if [ -n "$MYSQL_RESTORE_FILE" ]; then
+            mysql -h localhost -u $MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE < /restore/$MYSQL_RESTORE_FILE
+          fi
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        - name: restore-volume
+          mountPath: /restore
+          readOnly: true
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
@@ -51,6 +65,8 @@ spec:
       - name: mysql-init-script
         configMap:
           name: mysql-init-script
+      - name: restore-volume
+        emptyDir: {}
 #       - name: mysql-config1
 #         mountPath: /etc/mysql/conf.d
 #       - name: mysql-init-script
