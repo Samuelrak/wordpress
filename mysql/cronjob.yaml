@@ -4,7 +4,7 @@ metadata:
   name: backup-mysql
   namespace: word
 spec:
-  schedule: "24 10 * * *"
+  schedule: "55 13 * * *"
   jobTemplate:
     spec:
       template:
@@ -19,7 +19,7 @@ spec:
                 curl -L https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/bin/mc && chmod +x /usr/bin/mc
                 export PATH=$PATH:/usr/bin/mc
                 mkdir -p /var/lib/mysql
-                mysqldump -h mysql-service -u root --all-databases > /var/lib/mysql/mysql_backup_$(date +"%Y-%m-%d").sql
+                mysqldump -h mysql-service -u $MYSQL_USER -p$MYSQL_PASSWORD --databases $MYSQL_DATABASE  > /var/lib/mysql/mysql_backup_$(date +"%Y-%m-%d").sql
                 mc alias set myminio http://minio-service:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
                 mc cp /var/lib/mysql/mysql_backup_$(date +"%Y-%m-%d").sql myminio/mysql/
             envFrom:

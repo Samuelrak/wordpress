@@ -4,26 +4,23 @@ metadata:
   labels:
     app: minio
   name: minio
-  namespace: minio-dev
+  namespace: word
 spec:
   containers:
   - name: minio
     image: quay.io/minio/minio:latest
     command:
-    - /bin/sh
+    - /bin/bash
     - -c
     args:
-    - minio server /data --console-address :9090
-    ports:
-    - containerPort: 9090
-      protocol: TCP
+    - minio server /data/wordpress --console-address :9090
     volumeMounts:
-    - mountPath: /data
-      name: localvolume
+    - mountPath: /data/wordpress
+      name: minio-volume
   nodeSelector:
-    kubernetes.io/hostname: kubealpha.local
+    kubernetes.io/hostname: samuel
   volumes:
-  - name: localvolume
+  - name: minio-volume
     hostPath:
-      path: /mnt/disk1/data
+      path: /data/wordpress
       type: DirectoryOrCreate
