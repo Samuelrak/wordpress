@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: grant-privileges
+  namespace: word
+spec:
+  template:
+    spec:
+      containers:
+      - name: grant-privileges
+        image: mysql:latest
+        command: ["/bin/bash", "-c", "sleep 60; mysql -u root --password=$MYSQL_ROOT_PASSWORD -e \"ALTER USER 'wpuser'@'%' IDENTIFIED WITH caching_sha2_password BY 'jahoda';\""]
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_ROOT_PASSWORD
+      restartPolicy: OnFailure

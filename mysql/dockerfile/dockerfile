@@ -1,9 +1,9 @@
-FROM ubuntu:latest
+FROM mysql:latest
 
-RUN apt-get update
+COPY caching_sha2_password.cnf /etc/mysql/conf.d/
 
-RUN apt-get install -y mysql-server
+COPY entrypoint.sh /usr/local/bin/
 
- RUN apt-get install -y mysql-client
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
- CMD ["service", "mysql", "start"]
+ENTRYPOINT ["entrypoint.sh"]

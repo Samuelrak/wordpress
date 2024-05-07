@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config1
+  namespace: word
+data:
+  my.cnf: |
+    [mysqld]
+    skip-grant-tables
+    init_file = /etc/mysql/init.sql

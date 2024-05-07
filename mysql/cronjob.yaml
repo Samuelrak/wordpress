@@ -4,27 +4,27 @@ metadata:
   name: backup-mysql
   namespace: word
 spec:
-  schedule: "9 17 * * *"
+  schedule: "24 10 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: mysql-backup-container
-            image: ubuntu:latest
+            image: mysql:latest
             command: ["/bin/sh", "-c"]
             args:
               - |
-                mkdir /backup
-                curl https://dl.min.io/client/mc/release/linux-amd64/mc \
-                --create-dirs \
-                -o $HOME/minio-binaries/mc
-                chmod +x $HOME/minio-binaries/mc
-                export PATH=$PATH:$HOME/minio-binaries/
-                apt-get update && apt-get install -y mysql-client
-                mysqldump -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE > /backup/mysql_backup_$(date +"%Y-%m-%d").sql
+                mkdir -p /backup
+                curl -L https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/bin/mc && chmod +x /usr/bin/mc
+                export PATH=$PATH:/usr/bin/mc
+                mkdir -p /var/lib/mysql
+                mysqldump -h mysql-service -u root --all-databases > /var/lib/mysql/mysql_backup_$(date +"%Y-%m-%d").sql
                 mc alias set myminio http://minio-service:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
-                mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz myminio/wordpress/
+                mc cp /var/lib/mysql/mysql_backup_$(date +"%Y-%m-%d").sql myminio/mysql/
+            envFrom:
+            - configMapRef:
+                name: mysql-config
             env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
@@ -36,6 +36,21 @@ spec:
                 secretKeyRef:
                   name: minio-secret
                   key: secret-key
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: MYSQL_DATABASE
           restartPolicy: OnFailure
           volumes:
           - name: mysql-persistent-storage
@@ -43,3 +58,6 @@ spec:
               claimName: mysql-pvc
           - name: backup-volume
             emptyDir: {}
+          - name: mysql-data
+            persistentVolumeClaim:
+              claimName: mysql-pvc

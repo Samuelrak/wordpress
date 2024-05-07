@@ -2,7 +2,11 @@ resources:
   - mysql-service.yaml
   - mysql-deployment.yaml
   - mysql-config.yaml
+  - mysql-config1.yaml
 #  - mysql-script.yaml
-#  - mysql-secret.yaml
-#  - cronjob.yaml
-#  - pvc.yaml
+  - mysql-secret.yaml
+  - cronjob.yaml
+  - pvc.yaml
+#  - job.yaml
+  - mysql-init-script.yaml
+

@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: word-deploy
+  namespace: word
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: word-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: word-deploy
+        version: v1
+    spec:
+      affinity:
+       nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - worker01
+#                - samuel
+#      affinity:
+#        podAntiAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#          - labelSelector:
+#              matchExpressions:
+#              - key: app
+#                operator: In
+#                values:
+#                - word-deploy
+#            topologyKey: kubernetes.io/hostname
+#      nodeSelector:
+#        kubernetes.io/hostname: worker01
+      containers:
+      - image: wordpress:latest
+        name: word-deploy
+        ports:
+        - containerPort: 80
+#        resources:
+#          limits:
+#            cpu: 200m
+#            memory: 512Mi
+#          requests:
+#            cpu: 100m
+#            memory: 256Mi
+        volumeMounts:
+        - mountPath: /var/www/html/wp-config.php
+          name: wp-config-volume
+          subPath: wp-config.php
+#       - mountPath: /var/www/html/wp-content/plugins/classic-editor
+#         name: plugins-volume
+#         readOnly: true
+        - mountPath: /var/www/html
+          name: wordpress-files
+          readOnly: false
+      volumes:
+      - name: wp-config-volume
+        configMap:
+          name: word-config
+      - name: plugins-volume
+        emptyDir: {}
+      - name: word-secret-volume
+        secret:
+          secretName: word-secret
+      - name: wordpress-files
+        persistentVolumeClaim:
+          claimName: wordpress-pvc
