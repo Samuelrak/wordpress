@@ -7,4 +7,3 @@ data:
   my.cnf: |
     [mysqld]
     skip-grant-tables
-    init_file = /etc/mysql/init.sql

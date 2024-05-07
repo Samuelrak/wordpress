@@ -8,6 +8,3 @@ data:
   MYSQL_DATABASE: wp
   MYSQL_PASSWORD: jahoda
   MYSQL_ROOT_PASSWORD: jahoda
-  my.cnf: |
-    [mysqld]
-    skip-grant-tables

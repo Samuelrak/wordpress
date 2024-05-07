@@ -14,27 +14,48 @@ spec:
         app: mysql
     spec:
       containers:
-      - envFrom:
-        - configMapRef:
-            name: mysql-config
-        - secretRef:
-            name: mysql-secret
+      - env:
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: MYSQL_DATABASE
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: MYSQL_ROOT_PASSWORD
         image: mysql:latest
         name: mysql
         volumeMounts:
         - name: mysql-data
           mountPath: /var/lib/mysql
-#       - name: mysql-config1
-#         mountPath: /etc/mysql/conf.d
-#       - name: mysql-init-script
-#         mountPath: /etc/mysql/init.sql
-#         subPath: init.sql
+        - name: mysql-init-script
+          mountPath: /docker-entrypoint-initdb.d
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
           claimName: mysql-pvc
       - name: mysql-data
         emptyDir: {}
+      - name: mysql-init-script
+        configMap:
+          name: mysql-init-script
+#       - name: mysql-config1
+#         mountPath: /etc/mysql/conf.d
+#       - name: mysql-init-script
+#         mountPath: /etc/mysql/init.sql
+#         subPath: init.sql
 #     - name: mysql-config1
 #       configMap:
 #         name: mysql-config1
