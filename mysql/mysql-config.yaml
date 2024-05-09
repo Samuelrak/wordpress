@@ -8,12 +8,4 @@ data:
   MYSQL_DATABASE: wp
   MYSQL_PASSWORD: jahoda
   MYSQL_ROOT_PASSWORD: jahoda
-  MYSQL_DATABASE_RESTORE: wp1
-  MYSQL_TABLE_RESTORE: wp1
-  create_restore.sql: |
-    CREATE DATABASE wp1;
-    USE wp1;
-    CREATE TABLE IF NOT EXISTS wp1 (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(255) NOT NULL
-    );
+  MYSQL_TABLE: new_table

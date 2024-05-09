@@ -21,9 +21,10 @@ spec:
         - |
           while true; do
               if [ "$RESTORE_ENABLED" = "true" ]; then
-                  if [ "$MYSQL_DATABASE_RESTORE" = "wp1" ] && [ "$MYSQL_TABLE_RESTORE" = "wp1" ]; then
+                  if [ "$MYSQL_DATABASE_RESTORE" = "wp" ]; then
                       echo "db is restoring..."
-                      mysql -u h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE_RESTORE" < /docker-entrypoint-initdb.d/init.sql
+                      cp /restore/init.sql /docker-entrypoint-initdb.d
+                      mysql -u root -p"$MYSQL_ROOT_PASSWORD" < /docker-entrypoint-initdb.d/init.sql
                       restore_status=$?
                       echo $?
                       echo "restore completed."
@@ -36,13 +37,12 @@ spec:
               sleep 5
           done
         volumeMounts:
-        - name: restore-volume
-          mountPath: /restore
         - name: mysql-data
           mountPath: /var/lib/mysql
-        - name: mysql-init-script
+        - name: mysql-move
           mountPath: /docker-entrypoint-initdb.d
-
+        - name: mysql-init-script
+          mountPath: /restore
         env:
         - name: MYSQL_TABLE_RESTORE
           valueFrom:
@@ -69,6 +69,7 @@ spec:
 
       containers:
       - name: mysql
+        image: mysql:latest
         env:
         - name: MYSQL_USER
           valueFrom:
@@ -90,34 +91,20 @@ spec:
             configMapKeyRef:
               name: mysql-config
               key: MYSQL_ROOT_PASSWORD
-        - name: MYSQL_DATABASE_RESTORE
-          valueFrom:
-            configMapKeyRef:
-              name: mysql-init-script
-              key: MYSQL_DATABASE_RESTORE
-        - name: MYSQL_TABLE_RESTORE
-          valueFrom:
-            configMapKeyRef:
-              name: mysql-init-script
-              key: MYSQL_TABLE_RESTORE
-        image: mysql:latest
         volumeMounts:
         - name: mysql-data
           mountPath: /var/lib/mysql
-        - name: mysql-init-script
+        - name: mysql-move
           mountPath: /docker-entrypoint-initdb.d
 
       restartPolicy: Always
       volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pvc
       - name: mysql-data
         emptyDir: {}
       - name: mysql-init-script
         configMap:
           name: mysql-init-script
-      - name: restore-volume
+      - name: mysql-move
         emptyDir: {}
 #         mountPath: /etc/mysql/conf.d
 #       - name: mysql-init-script
