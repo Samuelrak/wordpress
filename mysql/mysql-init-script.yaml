@@ -4,6 +4,12 @@ metadata:
   name: mysql-init-script
   namespace: word
 data:
+  MYSQL_DATABASE_RESTORE: wp1
+  MYSQL_TABLE_RESTORE: wp1
   init.sql: |
-    GRANT SELECT, LOCK TABLES ON *.* TO 'root'@'%';
-    FLUSH PRIVILEGES
+    CREATE DATABASE wp1;
+    USE wp1;
+    CREATE TABLE IF NOT EXISTS wp1 (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL
+    );
