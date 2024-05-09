@@ -21,13 +21,15 @@ spec:
         - |
           while true; do
               if [ "$RESTORE_ENABLED" = "true" ]; then
-                 if [ "$MYSQL_DATABASE" = "wp" ]; then
-                      echo "Performing database restore..."
-                      mysql -u h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < /docker-entrypoint-initdb.d/init.sql
-                      echo "Database restore completed."
+                  if [ "$MYSQL_DATABASE_RESTORE" = "wp1" ] && [ "$MYSQL_TABLE_RESTORE" = "wp1" ]; then
+                      echo "db is restoring..."
+                      mysql -u h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE_RESTORE" < /docker-entrypoint-initdb.d/init.sql
+                      restore_status=$?
+                      echo $?
+                      echo "restore completed."
                       break
                   else
-                      echo "Database name is not wp. Skipping restore."
+                      echo "skipping restore."
                       break
                   fi
               fi
@@ -42,6 +44,16 @@ spec:
           mountPath: /docker-entrypoint-initdb.d
 
         env:
+        - name: MYSQL_TABLE_RESTORE
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-init-script
+              key: MYSQL_TABLE_RESTORE
+        - name: MYSQL_DATABASE_RESTORE
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-init-script
+              key: MYSQL_DATABASE_RESTORE
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
