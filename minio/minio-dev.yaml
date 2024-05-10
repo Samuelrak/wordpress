@@ -1,26 +1,77 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  labels:
-    app: minio
-  name: minio
+  name: minio-deployment
   namespace: word
 spec:
-  containers:
-  - name: minio
-    image: quay.io/minio/minio:latest
-    command:
-    - /bin/bash
-    - -c
-    args:
-    - minio server /data/wordpress --console-address :9090
-    volumeMounts:
-    - mountPath: /data/wordpress
-      name: minio-volume
-  nodeSelector:
-    kubernetes.io/hostname: samuel
-  volumes:
-  - name: minio-volume
-    hostPath:
-      path: /data/wordpress
-      type: DirectoryOrCreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        image: quay.io/minio/minio:latest
+        command:
+        - /bin/bash
+        - -c
+        args:
+        - minio server /myminio/mysql --console-address :9090
+        volumeMounts:
+        - mountPath: /myminio/mysql
+          name: minio-volume
+        env:
+        - name: RESTORE_ENABLED
+          value: "true"
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: minio-config
+              key: MYSQL_DATABASE
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secrets
+              key: accesskey
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secrets
+              key: secretkey
+      initContainers:
+      - name: restore
+        image: quay.io/minio/minio:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          if [ "$RESTORE_ENABLED" = "true" ]; then
+              if [ "$MYSQL_DATABASE" = "wp" ]; then
+                  echo "Database is restoring..."
+                  mv /restore/init.sql /myminio/mysql/
+                  mysql -u root -p"$MYSQL_ROOT_PASSWORD" < /myminio/mysql/init.sql
+                  restore_status=$?
+                  echo "Restore completed with status $restore_status."
+              else
+                  echo "Skipping restore because MYSQL_DATABASE is not 'wp'."
+              fi
+          else
+              echo "Restore is not enabled."
+          fi
+        volumeMounts:
+        - mountPath: /myminio/mysql
+          name: minio-volume
+        - name: restore-data
+          mountPath: /restore
+      volumes:
+      - name: minio-volume
+        hostPath:
+          path: /myminio/mysql
+          type: DirectoryOrCreate
+      - name: restore-data
+        emptyDir: {}
+      nodeSelector:
+        kubernetes.io/hostname: samuel

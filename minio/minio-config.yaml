@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minio-config
+  namespace: word
+data:
+  MYSQL_USER: user
+  MYSQL_DATABASE: wp
+  MYSQL_PASSWORD: db
+  MYSQL_ROOT_PASSWORD: jahoda
+  MYSQL_TABLE: new_table
