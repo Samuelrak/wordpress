@@ -24,6 +24,7 @@ spec:
                   if [ "$MYSQL_DATABASE_RESTORE" = "wp1" ]; then
                       echo "db is restoring..."
                       cp /restore/init.sql /docker-entrypoint-initdb.d
+                     #rm /restore/init.sql
                      #mysql -u root -p'$MYSQL_ROOT_PASSWORD' < /docker-entrypoint-initdb.d/init.sql
                       restore_status=$?
                       echo $?

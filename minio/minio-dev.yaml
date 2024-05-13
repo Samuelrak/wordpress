@@ -47,7 +47,8 @@ spec:
               if [ -n "$RESTORE_PATH" ] && [ -n "$RESTORE_FILE" ]; then
                   echo "mysql backup found"
                   mkdir -p /restore
-                  cp /myminio/mysql/mysql/mysql_backup_2024-05-10.sql/d5e6cdc4-bc5b-4794-a50b-c5c1e3d77a22/part.1 /restore
+                  cp $RESTORE_PATH/$RESTORE_FILE /restore
+                 #rm $RESTORE_PATH/$RESTORE_FILE
                   restore_status=$?
                   echo "restore completed with status $restore_status"
               else
@@ -63,7 +64,7 @@ spec:
               name: minio-config
               key: RESTORE_TRUE
         - name: RESTORE_PATH
-          value: "/myminio/mysql/mysql/mysql_backup_2024-05-10.sql/d5e6cdc4-bc5b-4794-a50b-c5c1e3d77a22"
+          value: "/myminio/mysql/mysql/mysql_backup_2024-05-12.sql/ce25a8b4-e1aa-4775-92e4-cf6f05fd8028"
         - name: RESTORE_FILE
           value: "part.1"
         volumeMounts:
