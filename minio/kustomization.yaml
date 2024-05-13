@@ -4,3 +4,4 @@ resources:
 - minio-config.yaml
 - minio-init-script.yaml
 - minio-service.yaml
+- minio-secret.yaml

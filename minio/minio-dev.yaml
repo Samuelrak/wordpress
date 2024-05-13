@@ -20,28 +20,23 @@ spec:
         - /bin/bash
         - -c
         args:
-        - minio server /myminio/mysql --console-address :9090
+        - minio server /myminio/mysql/mysql --console-address :9090
         volumeMounts:
-        - mountPath: /myminio/mysql
+        - mountPath: /myminio/mysql/mysql/
           name: minio-volume
+        - mountPath: /restore
+          name: minio-backup-volume
         env:
-        - name: RESTORE_ENABLED
-          value: "true"
-        - name: MYSQL_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: minio-config
-              key: MYSQL_DATABASE
         - name: MINIO_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              name: minio-secrets
-              key: accesskey
+              name: minio-secret
+              key: access-key
         - name: MINIO_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: minio-secrets
-              key: secretkey
+              name: minio-secret
+              key: secret-key
       initContainers:
       - name: restore
         image: quay.io/minio/minio:latest
@@ -49,29 +44,35 @@ spec:
         args:
         - |
           if [ "$RESTORE_ENABLED" = "true" ]; then
-              if [ "$MYSQL_DATABASE" = "wp" ]; then
-                  echo "Database is restoring..."
-                  mv /restore/init.sql /myminio/mysql/
-                  mysql -u root -p"$MYSQL_ROOT_PASSWORD" < /myminio/mysql/init.sql
+              if [ -f "/myminio/mysql/mysql/mysql_backup_2024-05-10.sql/d5e6cdc4-bc5b-4794-a50b-c5c1e3d77a22/part.1" ]; then
+                  echo "mysql backup found"
+                  mkdir -p /restore
+                  cp /myminio/mysql/mysql/mysql_backup_2024-05-10.sql/d5e6cdc4-bc5b-4794-a50b-c5c1e3d77a22/part.1 /restore
                   restore_status=$?
-                  echo "Restore completed with status $restore_status."
+                  echo "restore completed with status $restore_status"
               else
-                  echo "Skipping restore because MYSQL_DATABASE is not 'wp'."
+                  echo "mysql backup not found. skipping restore."
               fi
           else
-              echo "Restore is not enabled."
+              echo "restore is not enabled."
           fi
+        env:
+        - name: RESTORE_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: minio-config
+              key: RESTORE_ENABLED
         volumeMounts:
-        - mountPath: /myminio/mysql
+        - mountPath: /myminio/mysql/mysql
           name: minio-volume
-        - name: restore-data
-          mountPath: /restore
+        - mountPath: /restore
+          name: minio-backup-volume
       volumes:
       - name: minio-volume
         hostPath:
-          path: /myminio/mysql
+          path: /myminio/mysql/mysql
           type: DirectoryOrCreate
-      - name: restore-data
+      - name: minio-backup-volume
         emptyDir: {}
       nodeSelector:
         kubernetes.io/hostname: samuel

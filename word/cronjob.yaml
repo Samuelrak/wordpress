@@ -29,10 +29,16 @@ spec:
                 tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html .
                 mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz myminio/wordpress/
             env:
-            - name: MINIO_ACCESS_KEY
-              value: "KD4zQQpBL0rXdesz2eSB"
-            - name: MINIO_SECRET_KEY
-              value: "F1P1j1taPSGs6Poy6zSRPNvbXwGnfh2roxqCz1IS"
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-secret
+                key: access-key
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-secret
+                key: secret-key
             volumeMounts:
             - name: wordpress-persistent-storage
               mountPath: /var/www/html
