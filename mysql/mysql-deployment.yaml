@@ -20,17 +20,17 @@ spec:
         args:
         - |
           while true; do
-              if [ "$RESTORE_ENABLED" = "true" ]; then
-                  if [ "$MYSQL_DATABASE_RESTORE" = "wp" ]; then
+              if [ "$RESTORE_TRUE" = "true" ]; then
+                  if [ "$MYSQL_DATABASE_RESTORE" = "wp1" ]; then
                       echo "db is restoring..."
                       cp /restore/init.sql /docker-entrypoint-initdb.d
-                      mysql -u root -p"$MYSQL_ROOT_PASSWORD" < /docker-entrypoint-initdb.d/init.sql
+                     #mysql -u root -p'$MYSQL_ROOT_PASSWORD' < /docker-entrypoint-initdb.d/init.sql
                       restore_status=$?
                       echo $?
-                      echo "restore completed."
+                      echo "restore completed"
                       break
                   else
-                      echo "skipping restore."
+                      echo "skipping restore"
                       break
                   fi
               fi
@@ -64,7 +64,7 @@ spec:
             configMapKeyRef:
               name: mysql-config
               key: MYSQL_DATABASE
-        - name: RESTORE_ENABLED
+        - name: RESTORE_TRUE
           value: "true"
 
       containers:
