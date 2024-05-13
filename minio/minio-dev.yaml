@@ -37,43 +37,6 @@ spec:
             secretKeyRef:
               name: minio-secret
               key: secret-key
-      initContainers:
-      - name: restore
-        image: quay.io/minio/minio:latest
-        command: ["/bin/sh", "-c"]
-        args:
-        - |
-          if [ "$RESTORE_TRUE" = "true" ]; then
-              if [ -n "$RESTORE_PATH" ] && [ -n "$RESTORE_FILE" ]; then
-                  echo "mysql backup found"
-                  mkdir -p /restore
-                  cp $RESTORE_PATH/$RESTORE_FILE /restore
-                 #rm -rf $DELETE_PATH
-                  restore_status=$?
-                  echo "restore completed with status $restore_status"
-              else
-                  echo "mysql backup not found. skipping restore"
-              fi
-          else
-              echo "restore is not enabled"
-          fi
-        env:
-        - name: RESTORE_TRUE
-          valueFrom:
-            configMapKeyRef:
-              name: minio-config
-              key: RESTORE_TRUE
-        - name: DELETE_PATH
-          value: "/myminio/mysql"
-        - name: RESTORE_PATH
-          value: "/myminio/mysql/mysql/mysql_backup_2024-%m-%d.sql/ce25a8b4-e1aa-4775-92e4-cf6f05fd8028"
-        - name: RESTORE_FILE
-          value: "part.1"
-        volumeMounts:
-        - mountPath: /myminio/mysql/mysql
-          name: minio-volume
-        - mountPath: /restore
-          name: minio-backup-volume
       volumes:
       - name: minio-volume
         hostPath:
