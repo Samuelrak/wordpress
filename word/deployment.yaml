@@ -29,17 +29,27 @@ spec:
         name: word-deploy
         ports:
         - containerPort: 80
-        command: ["/bin/sh", "-c"]
-        args: ["apache2ctl -D FOREGROUND"]
         lifecycle:
+          postStart:
+            exec:
+              command:
+                - "/bin/sh"
+                - "-c"
+                - |
+                  export RESTORE_ENABLE="false"
           preStop:
             exec:
-              command: ["/usr/sbin/apachectl", "-k", "graceful-stop"]
+              command:
+                - "/bin/sh"
+                - "-c"
+                - |
+                  export RESTORE_ENABLE="false"
         volumeMounts:
         - mountPath: /var/www/html
           name: wordpress-files
-        - mountPath: /var/log/apache2
-          name: apache-logs
+        - mountPath: /var/www/html/wp-config.php
+          name: wp-config-volume
+          subPath: wp-config.php
         env:
         - name: MINIO_ACCESS_KEY
           valueFrom:
@@ -57,6 +67,9 @@ spec:
               name: minio-config
               key: RESTORE_TRUE
       volumes:
+      - name: wp-config-volume
+        configMap:
+          name: word-config
       - name: plugins-volume
         emptyDir: {}
       - name: word-secret-volume
@@ -73,12 +86,12 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - |
-          tail -f /var/log/apache2/error.log > /var/log/apache2/error_copy.log
-          exit_code=$?
-          echo "Exit code: $exit_code"
-          exit $exit_code
+          if [ "$RESTORE_TRUE" = "true" ]; then
+            echo "RESTORE_TRUE is true. Setting it to false."
+            export RESTORE_TRUE="false"
+          else
+            echo "RESTORE_TRUE is not true."
+          fi
         volumeMounts:
         - mountPath: /var/www/html
           name: wordpress-files
-        - mountPath: /var/log/apache2
-          name: apache-logs
