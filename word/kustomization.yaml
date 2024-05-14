@@ -4,6 +4,7 @@ resources:
 #- deployment2.yaml
 - ingress.yaml
 - config.yaml
+- config1.yaml
 - secret.yaml
 #- cronjob.yaml
 - pvc.yaml

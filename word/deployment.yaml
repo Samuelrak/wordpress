@@ -16,7 +16,7 @@ spec:
         version: v1
     spec:
       affinity:
-       nodeAffinity:
+        nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
@@ -24,46 +24,39 @@ spec:
                 operator: In
                 values:
                 - worker01
-#                - samuel
-#      affinity:
-#        podAntiAffinity:
-#          requiredDuringSchedulingIgnoredDuringExecution:
-#          - labelSelector:
-#              matchExpressions:
-#              - key: app
-#                operator: In
-#                values:
-#                - word-deploy
-#            topologyKey: kubernetes.io/hostname
-#      nodeSelector:
-#        kubernetes.io/hostname: worker01
       containers:
       - image: wordpress:latest
         name: word-deploy
         ports:
         - containerPort: 80
-#        resources:
-#          limits:
-#            cpu: 200m
-#            memory: 512Mi
-#          requests:
-#            cpu: 100m
-#            memory: 256Mi
+        command: ["/bin/sh", "-c"]
+        args: ["apache2ctl -D FOREGROUND"]
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/usr/sbin/apachectl", "-k", "graceful-stop"]
         volumeMounts:
-        - mountPath: /var/www/html/wp-config.php
-          name: wp-config-volume
-          subPath: wp-config.php
-          readOnly: false
-#       - mountPath: /var/www/html/wp-content/plugins/classic-editor
-#         name: plugins-volume
-#         readOnly: true
         - mountPath: /var/www/html
           name: wordpress-files
-          readOnly: false
+        - mountPath: /var/log/apache2
+          name: apache-logs
+        env:
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: access-key
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: secret-key
+        - name: RESTORE_TRUE
+          valueFrom:
+            configMapKeyRef:
+              name: minio-config
+              key: RESTORE_TRUE
       volumes:
-      - name: wp-config-volume
-        configMap:
-          name: word-config
       - name: plugins-volume
         emptyDir: {}
       - name: word-secret-volume
@@ -72,39 +65,20 @@ spec:
       - name: wordpress-files
         persistentVolumeClaim:
           claimName: wordpress-pvc
+      - name: apache-logs
+        emptyDir: {}
       initContainers:
-       - name: restore
-         image: alpine:latest
-         command: ["/bin/sh", "-c"]
-         args:
-         - |
-           if [ ! -d "/var/www/html" ]; then
-             apk add --no-cache curl
-             curl -L https://dl.min.io/client/mc/release/linux-amd64/mc --create-dirs -o $HOME/minio-binaries/mc && \
-             chmod +x $HOME/minio-binaries/mc && \
-             export PATH=$PATH:$HOME/minio-binaries/ && \
-             echo "restore needed"
-             mc cp myminio/wordpress/wordpress_backup_2024-05-14.tar.gz /var/www/html/wordpress_backup.tar.gz
-             tar -zxvf /var/www/html/wordpress_backup.tar.gz -C /var/www/html/
-           else
-             echo "restore not needed"
-           fi
-         volumeMounts:
-         - mountPath: /var/www/html
-           name: wordpress-files
-         env:
-         - name: MINIO_ACCESS_KEY
-           valueFrom:
-             secretKeyRef:
-               name: minio-secret
-               key: access-key
-         - name: MINIO_SECRET_KEY
-           valueFrom:
-             secretKeyRef:
-               name: minio-secret
-               key: secret-key
-         - name: RESTORE_TRUE
-           valueFrom:
-             configMapKeyRef:
-               name: minio-config
-               key: RESTORE_TRUE
+      - name: restore
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          tail -f /var/log/apache2/error.log > /var/log/apache2/error_copy.log
+          exit_code=$?
+          echo "Exit code: $exit_code"
+          exit $exit_code
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: wordpress-files
+        - mountPath: /var/log/apache2
+          name: apache-logs
