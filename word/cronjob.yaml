@@ -4,7 +4,7 @@ metadata:
   name: backup-wordpress
   namespace: word
 spec:
-  schedule: "40 13 * * *"
+  schedule: "27 7 * * *"
   jobTemplate:
     spec:
       template:
@@ -19,29 +19,29 @@ spec:
                 export TERM=vt100
                 export DEBIAN_FRONTEND=noninteractive
                 apk add --no-cache curl
-                curl -L https://dl.min.io/client/mc/release/linux-amd64/mc \
-                --create-dirs \
-                -o $HOME/minio-binaries/mc
-                chmod +x $HOME/minio-binaries/mc
-                export PATH=$PATH:$HOME/minio-binaries/
-                mkdir -p /backup
-                mc alias set myminio http://minio-service:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
-                tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html .
+                curl -L https://dl.min.io/client/mc/release/linux-amd64/mc --create-dirs -o $HOME/minio-binaries/mc && \
+                chmod +x $HOME/minio-binaries/mc && \
+                export PATH=$PATH:$HOME/minio-binaries/ && \
+                mkdir -p /backup && \
+                mc alias set myminio http://minio-service:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY && \
+                tar -czf /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz -C /var/www/html . && \
                 mc cp /backup/wordpress_backup_$(date +"%Y-%m-%d").tar.gz myminio/wordpress/
             env:
-          - name: MINIO_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-secret
-                key: access-key
-          - name: MINIO_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: minio-secret
-                key: secret-key
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: access-key
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secret
+                  key: secret-key
             volumeMounts:
             - name: wordpress-persistent-storage
               mountPath: /var/www/html
+            - name: backup-volume
+              mountPath: /backup
           restartPolicy: OnFailure
           volumes:
           - name: wordpress-persistent-storage
