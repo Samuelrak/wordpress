@@ -3,8 +3,9 @@ resources:
 - deployment.yaml
 #- deployment2.yaml
 - ingress.yaml
-- config.yaml
-- config1.yaml
+#- config.yaml
+#- config1.yaml
 - secret.yaml
 #- cronjob.yaml
 - pvc.yaml
+- word-config.yaml

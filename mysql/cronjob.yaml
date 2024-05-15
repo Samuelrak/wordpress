@@ -4,7 +4,7 @@ metadata:
   name: backup-mysql
   namespace: word
 spec:
-  schedule: "8 20  * * *"
+  schedule: "12 14  * * *"
   jobTemplate:
     spec:
       template:

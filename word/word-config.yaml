@@ -12,6 +12,7 @@ data:
 #  WORDPRESS_DB_NAME: wp
 #  WORDPRESS_DB_PASSWORD: jahoda
   WORDPRESS_DB_USER: wpuser
+  RESTORE_DATE: "2024-05-13"
   wp-config.php: |
     <?php
     /**

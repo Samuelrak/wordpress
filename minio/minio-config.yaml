@@ -9,4 +9,4 @@ data:
   MYSQL_PASSWORD: db
   MYSQL_ROOT_PASSWORD: jahoda
   MYSQL_TABLE: new_table
-  RESTORE_TRUE: "true"
+    #  RESTORE_TRUE: 12.1.2024
