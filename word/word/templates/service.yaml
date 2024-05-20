@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: {{ .Values.kind.service }}
+metadata:
+  name: {{ .Values.wordpress.deploy }}
+spec:
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: {{ .Values.service.protocol }}
+  selector:
+    app: {{ .Values.wordpress.deploy }}

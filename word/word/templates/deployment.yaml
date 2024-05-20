@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "word.fullname" . }}
+  labels:
+    app: {{ include "word.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "word.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "word.fullname" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          volumeMounts:
+            - name: {{ .Values.volumeMountsName.wordfiles }}
+              mountPath: {{ .Values.volumeMountsPath.wordfiles }}
+            - name: {{ .Values.volumeMountsName.wordconfig }}
+              mountPath: {{ .Values.volumeMountsPath.wordconfig }}
+              subPath: {{ .Values.volumeMountsSubPath.wordconfig }}
+          env:
+#           - name: {{ .Values.envName.minio.access }}
+#             valueFrom:
+#               secretKeyRef:
+#                 name: {{ .Values.envSecretKeyRef.name.minio }}
+#                 key: {{ .Values.envSecretKeyRef.key.access }}
+#           - name: {{ .Values.envName.minio.secret }}
+#             valueFrom:
+#               secretKeyRef:
+#                 name: {{ .Values.envSecretKeyRef.name.minio }}
+#                 key: {{ .Values.envSecretKeyRef.key.secret }}
+            - name: {{ .Values.envName.word.restore }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.wordpress.config }}
+                  key: {{ .Values.envName.word.restore }}
+      volumes:
+        - name: {{ .Values.volumes.name.config }}
+          configMap:
+            name: {{ .Values.wordpress.config }}
+        - name: {{ .Values.volumes.name.plugin }}
+          emptyDir: {}
+        - name: {{ .Values.volumes.name.secret }}
+          secret:
+            secretName: {{ .Values.wordpress.secret }}
+        - name: {{ .Values.volumes.name.files }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.claimName.files }}
+        - name: {{ .Values.volumes.name.apache }}
+          emptyDir: {}
+

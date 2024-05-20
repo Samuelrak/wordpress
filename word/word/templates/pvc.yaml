@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: {{ .Values.kind.pvc }}
+metadata:
+  name: {{ .Values.wordpress.pvc }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.size }}

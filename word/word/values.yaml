@@ -1,0 +1,119 @@
+replicaCount: 1
+image:
+  repository: wordpress
+  tag: latest
+  pullPolicy: IfNotPresent
+
+kind:
+  deploy: Deploy
+  service: Service
+  secret: Secret
+  config: ConfigMap
+  pvc: PersistentVolumeClaim
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  protocol: TCP
+
+pvc:
+  size: 1Gi
+
+configMap:
+  WORDPRESS_DEBUG: "true"
+  WORDPRESS_DB_HOST: mysql-service
+  WORDPRESS_DB_USER: wpuser
+  RESTORE_DATE: "2024-05-13"
+
+secret:
+  WORDPRESS_DB_PASSWORD: amFob2Rh
+  WORDPRESS_DB_NAME: d3A=
+
+wordpress:
+  deploy: word-deploy
+  service: word-service
+  secret: word-secret
+  config: word-config
+  pvc: word-pvc
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "250m"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+volumeMountsName:
+  wordfiles: wordpress-files
+  wordconfig: wp-config-volume
+
+volumeMountsPath:
+  wordfiles: /var/www/html
+  wordconfig: /var/www/html/wp-config.php
+
+volumeMountsSubPath:
+  wordconfig: wp-config.php
+
+envName:
+  minio:
+    access: MINIO_ACCESS_KEY
+    secret: MINIO_SECRET_KEY
+  word:
+    restore: RESTORE_DATE
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+envSecretKeyRef:
+  name:
+    minio: minio-secret
+  key:
+    access: access-key
+    secret: secret-key
+
+volumes:
+  name:
+    config: wp-config-volume
+    plugin: plugins-volume
+    secret: word-secret-volume
+    files: wordpress-files
+    apache: apache-logs
+  claimName:
+    files: wordpress-pvc
+
+configMapValues:
+  WORDPRESS_DEBUG: "true"
+  WORDPRESS_DB_HOST: mysql-service
+  WORDPRESS_DB_USER: wpuser
+  RESTORE_DATE: "2024-05-13"
+
+secretMapValues:
+  WORDPRESS_DB_PASSWORD: amFob2Rh
+  WORDPRESS_DB_NAME: d3A=
+
+
