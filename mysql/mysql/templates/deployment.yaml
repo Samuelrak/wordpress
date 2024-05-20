@@ -36,11 +36,11 @@ spec:
               sleep 5
           done
         volumeMounts:
-        - name: {{ .Values.volumeMountsName.mysql-data }}
-          mountPath: {{ .Values.volumeMountsPath.mysql-data }}
-        - name: {{ .Values.volumeMountsName.mysql-move }}
-          mountPath: {{ .Values.volumeMountsPath.mysql-move }}
-        - name: {{ .Values.volumeMountsName.mysql-init-script }}
+        - name: {{ .Values.volumeMountsName.data }}
+          mountPath: {{ .Values.volumeMountsPath.data }}
+        - name: {{ .Values.volumeMountsName.move }}
+          mountPath: {{ .Values.volumeMountsPath.move }}
+        - name: {{ .Values.volumeMountsName.init-script }}
           mountPath: {{ .Values.volumeMountsPath.init-script }}
         env:
         - name: {{ .Values.envName.restoreTable }}
@@ -64,7 +64,7 @@ spec:
               name: {{ .Values.envConfig.name.config }}
               key: {{ .Values.envName.database }}
         - name: {{ .Values.envName.restoreBool }}
-          value: {{ .Values.envConfig.bool }}
+          value: "{{ .Values.envConfig.bool }}"
 
       containers:
       - name: {{ .Values.image.mysql }}
@@ -98,11 +98,11 @@ spec:
 
       restartPolicy: {{ .Values.image.restart }}
       volumes:
-      - name: {{ .Values.volumeMountsName.mysql-data }}
+      - name: {{ .Values.volumeMountsName.data }}
         emptyDir: {}
-      - name: {{ .Values.volumeMountsName.mysql-init-script }}
+      - name: {{ .Values.volumeMountsName.init-script }}
         configMap:
-          name: {{ .Values.volumeMountsName.mysql-init-script }}
-      - name: {{ .Values.volumeMountsName.mysql-move }}
+          name: {{ .Values.volumeMountsName.init-script }}
+      - name: {{ .Values.volumeMountsName.move }}
         emptyDir: {}
 
