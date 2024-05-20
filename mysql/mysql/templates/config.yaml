@@ -1,11 +1,10 @@
 apiVersion: v1
-kind: ConfigMap
+kind: {{ .Values.kind.config}}
 metadata:
-  name: mysql-config
-  namespace: {{ .Values.namespace }}
+  name: {{ .Values.mysql.config}}
 data:
-  MYSQL_USER: {{ .Values.mysql.user }}
-  MYSQL_DATABASE: {{ .Values.mysql.database }}
-  MYSQL_PASSWORD: {{ .Values.mysql.password }}
-  MYSQL_TABLE_RESTORE: {{ .Values.initScript.MYSQL_DATABASE_RESTORE }}
-  RESTORE_TRUE: {{ .Values.initScript.RESTORE_TRUE }}
+  MYSQL_USER: {{ .Values.configData.name }}
+  MYSQL_DATABASE: {{ .Values.configData.database }}
+  MYSQL_PASSWORD: {{ .Values.configData.password }}
+  MYSQL_ROOT_PASSWORD: {{ .Values.configData.rootPassword }}
+  RESTORE_DATE_DB: {{ .Values.configData.restoreDate }}

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "redis-chart.fullname" . }}-deploy
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "redis-chart.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "redis-chart.name" . }}
+    spec:
+      containers:
+      - name: {{ .Values.redis.name }}
+        image: "{{ .Values.redis.image }}"
+        ports:
+        - containerPort: {{ .Values.redis.port }}

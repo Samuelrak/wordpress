@@ -1,21 +1,21 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: {{ .Values.kind.deploy }}
 metadata:
-  name: mysql
-  namespace: {{ .Values.namespace }}
+  name: {{ .Values.mysql.deploy }}
+  namespace: {{ .Values.mysql.deploy }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.image.replicas }}
   selector:
     matchLabels:
-      app: mysql
+      app:  {{ .Values.mysql.deploy }}
   template:
     metadata:
       labels:
-        app: mysql
+        app: {{ .Values.mysql.deploy }}
     spec:
       initContainers:
-      - name: restore
-        image: {{ .Values.mysql.image }}
+      - name: {{ .Values.image.name }}
+        image: {{ .Values.image.mysql }}:{{ .Values.image.version }}
         command: ["/bin/sh", "-c"]
         args:
         - |
@@ -36,70 +36,73 @@ spec:
               sleep 5
           done
         volumeMounts:
-        - name: mysql-data
-          mountPath: /var/lib/mysql
-        - name: mysql-move
-          mountPath: /docker-entrypoint-initdb.d
-        - name: mysql-init-script
-          mountPath: /restore
+        - name: {{ .Values.volumeMountsName.mysql-data }}
+          mountPath: {{ .Values.volumeMountsPath.mysql-data }}
+        - name: {{ .Values.volumeMountsName.mysql-move }}
+          mountPath: {{ .Values.volumeMountsPath.mysql-move }}
+        - name: {{ .Values.volumeMountsName.mysql-init-script }}
+          mountPath: {{ .Values.volumeMountsPath.init-script }}
         env:
-        - name: MYSQL_TABLE_RESTORE
+        - name: {{ .Values.envName.restoreTable }}
           valueFrom:
             configMapKeyRef:
-              name: {{ .Values.mysql.initScriptConfigMap }}
-              key: MYSQL_TABLE_RESTORE
-        - name: MYSQL_DATABASE_RESTORE
-          value: "{{ .Values.initScript.MYSQL_DATABASE_RESTORE }}"
-        - name: MYSQL_ROOT_PASSWORD
+              name: {{ .Values.envConfig.name.init }}
+              key: {{ .Values.envName.restoreTable }}
+        - name: {{ .Values.envName.restoreDatabase }}
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.envConfig.name.init }}
+              key: {{ .Values.envName.restoreDatabase }}
+        - name: {{ .Values.envName.restorePassword }}
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
-              key: MYSQL_ROOT_PASSWORD
-        - name: MYSQL_DATABASE
+              name: {{ .Values.envConfig.name.secret }}
+              key: {{ .Values.envName.restorePassword }}
+        - name: {{ .Values.envName.database }}
           valueFrom:
             configMapKeyRef:
-              name: mysql-config
-              key: MYSQL_DATABASE
-        - name: RESTORE_TRUE
-          value: "{{ .Values.initScript.RESTORE_TRUE }}"
+              name: {{ .Values.envConfig.name.config }}
+              key: {{ .Values.envName.database }}
+        - name: {{ .Values.envName.restoreBool }}
+          value: {{ .Values.envConfig.bool }}
 
       containers:
-      - name: mysql
-        image: {{ .Values.mysql.image }}
+      - name: {{ .Values.image.mysql }}
+        image: {{ .Values.image.mysql }}
         env:
-        - name: MYSQL_USER
+        - name: {{ .Values.envName.user }}
           valueFrom:
             configMapKeyRef:
-              name: mysql-config
-              key: MYSQL_USER
-        - name: MYSQL_PASSWORD
+              name: {{ .Values.envConfig.config }}
+              key: {{ .Values.envName.user }}
+        - name: {{ .Values.envName.password }}
           valueFrom:
             configMapKeyRef:
-              name: mysql-config
-              key: MYSQL_PASSWORD
-        - name: MYSQL_DATABASE
+              name: {{ .Values.envConfig.config }}
+              key: {{ .Values.envName.password }}
+        - name: {{ .Values.envName.database }}
           valueFrom:
             configMapKeyRef:
-              name: mysql-config
-              key: MYSQL_DATABASE
-        - name: MYSQL_ROOT_PASSWORD
+              name: {{ .Values.envConfig.config }}
+              key: {{ .Values.envName.database }}
+        - name: {{ .Values.envName.rootPassword }}
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
-              key: MYSQL_ROOT_PASSWORD
+              name: {{ .Values.envConfig.secret }}
+              key: {{ .Values.envName.rootPassword }}
         volumeMounts:
-        - name: mysql-data
-          mountPath: /var/lib/mysql
-        - name: mysql-move
-          mountPath: /docker-entrypoint-initdb.d
+        - name: {{ .Values.volumeMountsName.mysql-data }}
+          mountPath: {{ .Values.volumeMountsPath.mysql-data }}
+        - name: {{ .Values.volumeMountsName.mysql-move }}
+          mountPath: {{ .Values.volumeMountsPath.mysql-move }}
 
-      restartPolicy: Always
+      restartPolicy: {{ .Values.image.restart }}
       volumes:
-      - name: mysql-data
+      - name: {{ .Values.volumeMountsName.mysql-data }}
         emptyDir: {}
-      - name: mysql-init-script
+      - name: {{ .Values.volumeMountsName.mysql-init-script }}
         configMap:
-          name: {{ .Values.mysql.initScriptConfigMap }}
-      - name: mysql-move
+          name: {{ .Values.volumeMountsName.mysql-init-script }}
+      - name: {{ .Values.volumeMountsName.mysql-move }}
         emptyDir: {}
 
